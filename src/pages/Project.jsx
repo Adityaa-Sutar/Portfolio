@@ -62,7 +62,7 @@ const Project = () => {
   ];
 
   return (
-    <section id="work" className="min-h-screen pt-24 pb-16 px-4 md:px-6 bg-zinc-950 text-white flex flex-col justify-center relative overflow-hidden">
+    <section id="work" className="min-h-screen pt-24 pb-16 px-4 md:px-6 bg-zinc-950 text-white flex flex-col justify-center relative overflow-x-hidden">
       {/* Background Decor */}
       <div className="absolute top-[20%] right-[-10%] w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-purple-500/10 rounded-full blur-[80px] pointer-events-none will-change-transform" style={{transform: 'translateZ(0)'}} />
       <div className="absolute bottom-[20%] left-[-10%] w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-blue-600/10 rounded-full blur-[80px] pointer-events-none will-change-transform" style={{transform: 'translateZ(0)'}} />

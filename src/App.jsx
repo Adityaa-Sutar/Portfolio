@@ -16,12 +16,21 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    // Detect touch/mobile devices — Lenis smooth scroll conflicts with
+    // native touch scrolling on iOS/Android, causing the page to freeze.
+    // On touch devices we skip Lenis entirely and rely on native scroll.
+    const isTouchDevice =
+      'ontouchstart' in window ||
+      navigator.maxTouchPoints > 0 ||
+      window.matchMedia('(pointer: coarse)').matches
+
+    if (isTouchDevice) return  // let the browser handle touch scroll natively
+
     const lenis = new Lenis({
       duration: 1.2,          // slightly longer = smoother feel
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // expo easing
       smoothWheel: true,
       wheelMultiplier: 0.8,   // reduce wheel sensitivity = less jank
-      touchMultiplier: 1.5,
     })
     let rafId;
 
@@ -35,10 +44,7 @@ const App = () => {
     return () => {
       cancelAnimationFrame(rafId)
       lenis.destroy()
-    }   
-
-
-
+    }
   }, [])
 
   return (

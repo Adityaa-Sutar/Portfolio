@@ -6,11 +6,16 @@ const Navbarpart2 = () => {
   const [isOpen, setIsOpen] = useState(false)
 
   const scrollToSection = (sectionId) => {
-    const element = document.getElementById(sectionId)
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      setIsOpen(false)
-    }
+    setIsOpen(false)
+    // Small delay to let the mobile menu close animation start before scrolling
+    setTimeout(() => {
+      const element = document.getElementById(sectionId)
+      if (!element) return
+      // Calculate offset accounting for fixed navbar height (~80px)
+      const navbarHeight = 72
+      const elementTop = element.getBoundingClientRect().top + window.scrollY - navbarHeight
+      window.scrollTo({ top: elementTop, behavior: 'smooth' })
+    }, 100)
   }
 
   const menuItems = [

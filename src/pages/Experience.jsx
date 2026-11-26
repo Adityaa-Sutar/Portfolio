@@ -36,7 +36,7 @@ const Experience = () => {
   ];
 
   return (
-    <div className="min-h-screen pt-24 pb-24 px-4 md:px-6 bg-zinc-950 text-white flex flex-col justify-center relative overflow-hidden w-full">
+    <div className="min-h-screen pt-24 pb-24 px-4 md:px-6 bg-zinc-950 text-white flex flex-col justify-center relative overflow-x-hidden w-full">
       {/* Dynamic Background Gradients */}
       <div className="absolute top-[20%] right-[10%] w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-blue-600/10 rounded-full blur-[80px] pointer-events-none opacity-50 will-change-transform" style={{transform: 'translateZ(0)'}} />
       <div className="absolute bottom-[20%] left-[10%] w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-purple-600/10 rounded-full blur-[80px] pointer-events-none opacity-50 will-change-transform" style={{transform: 'translateZ(0)'}} />

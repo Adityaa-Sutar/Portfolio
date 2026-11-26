@@ -23,7 +23,7 @@ const About = () => {
   ];
 
   return (
-    <div className="min-h-screen pt-24 pb-16 px-4 md:px-6 bg-zinc-950 text-foreground flex flex-col justify-center text-justify relative overflow-hidden">
+    <div className="min-h-screen pt-24 pb-16 px-4 md:px-6 bg-zinc-950 text-foreground flex flex-col justify-center text-justify relative overflow-x-hidden">
       {/* Background Decor */}
       <div className="absolute top-20 left-10 w-48 h-48 md:w-72 md:h-72 bg-blue-500/10 rounded-full blur-[60px] md:blur-[80px] pointer-events-none will-change-transform" style={{transform: 'translateZ(0)'}} />
       <div className="absolute bottom-20 right-10 w-48 h-48 md:w-72 md:h-72 bg-purple-500/10 rounded-full blur-[60px] md:blur-[80px] pointer-events-none will-change-transform" style={{transform: 'translateZ(0)'}} />

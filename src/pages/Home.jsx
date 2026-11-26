@@ -6,7 +6,7 @@ import profileImg from '../assets/img.jpg'
 
 const Home = () => {
   return (
-    <div className="relative min-h-screen w-full bg-zinc-950 overflow-hidden flex items-center justify-center px-4 md:px-6">
+    <div className="relative min-h-screen w-full bg-zinc-950 overflow-x-hidden flex items-center justify-center px-4 md:px-6">
       {/* Background Decor - GPU composited, pointer-events off */}
       <div className="absolute top-[-10%] right-[-5%] w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-indigo-500/20 rounded-full blur-[80px] pointer-events-none opacity-50 will-change-transform" style={{transform: 'translateZ(0)'}} />
       <div className="absolute bottom-[-10%] left-[-10%] w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-blue-600/10 rounded-full blur-[80px] pointer-events-none opacity-50 will-change-transform" style={{transform: 'translateZ(0)'}} />
