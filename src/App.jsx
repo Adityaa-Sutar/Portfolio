@@ -1,9 +1,8 @@
-import React, { useState, useEffect, lazy, Suspense } from 'react'
-import { AnimatePresence } from 'framer-motion'
+import React, { useEffect, lazy, Suspense } from 'react'
+import { MotionConfig } from 'framer-motion'
 import Lenis from 'lenis'
 import Navbar from './components/Navbar/Navbar'
 import Home from './pages/Home'
-import Preloader from './components/Preloader'
 import './App.css'
 
 // Lazy-load below-the-fold sections for faster initial paint
@@ -13,32 +12,25 @@ const Project = lazy(() => import('./pages/Project'))
 const Contact = lazy(() => import('./pages/Contact'))
 
 const App = () => {
-  const [isLoading, setIsLoading] = useState(true);
-
   useEffect(() => {
-    // Detect touch/mobile devices — Lenis smooth scroll conflicts with
-    // native touch scrolling on iOS/Android, causing the page to freeze.
-    // On touch devices we skip Lenis entirely and rely on native scroll.
+    // Skip Lenis on touch devices so native mobile scroll stays fluid
     const isTouchDevice =
       'ontouchstart' in window ||
       navigator.maxTouchPoints > 0 ||
       window.matchMedia('(pointer: coarse)').matches
 
-    if (isTouchDevice) return  // let the browser handle touch scroll natively
+    if (isTouchDevice) return
 
     const lenis = new Lenis({
-      duration: 1.2,          // slightly longer = smoother feel
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // expo easing
+      duration: 1.1,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
-      wheelMultiplier: 0.8,   // reduce wheel sensitivity = less jank
+      wheelMultiplier: 0.85,
     })
 
-    // Expose lenis globally so navbar links can call lenis.scrollTo()
-    // instead of window.scrollTo(), avoiding a dual-animation conflict.
     window.__lenis = lenis
 
-    let rafId;
-
+    let rafId
     function raf(time) {
       lenis.raf(time)
       rafId = requestAnimationFrame(raf)
@@ -54,41 +46,35 @@ const App = () => {
   }, [])
 
   return (
-    <div className="relative bg-background">
-      <AnimatePresence mode='wait'>
-        {isLoading && <Preloader finishLoading={() => setIsLoading(false)} />}
-      </AnimatePresence>
+    <MotionConfig reducedMotion="user">
+      <div className="relative min-h-screen bg-zinc-950 text-zinc-100 selection:bg-blue-500/30">
+        <Navbar />
 
-      <Navbar />
+        <main>
+          <section id="home">
+            <Home />
+          </section>
 
-      {/* Home Section - eagerly loaded (above the fold) */}
-      <section id="home" className="min-h-screen">
-        <Home />
-      </section>
+          <Suspense fallback={<div className="min-h-screen bg-zinc-950" />}>
+            <section id="about">
+              <About />
+            </section>
 
-      {/* Below-the-fold sections - lazy loaded */}
-      <Suspense fallback={<div className="min-h-screen bg-zinc-950" />}>
-        {/* About Section */}
-        <section id="about" className="min-h-screen">
-          <About />
-        </section>
+            <section id="experience">
+              <Experience />
+            </section>
 
-        {/* Experience Section */}
-        <section id="experience" className="min-h-screen">
-          <Experience />
-        </section>
+            <section id="work">
+              <Project />
+            </section>
 
-        {/* Projects Section */}
-        <section id="work" className="min-h-screen">
-          <Project />
-        </section>
-
-        {/* Contact Section */}
-        <section id="contact" className="min-h-screen">
-          <Contact />
-        </section>
-      </Suspense>
-    </div>
+            <section id="contact">
+              <Contact />
+            </section>
+          </Suspense>
+        </main>
+      </div>
+    </MotionConfig>
   )
 }
 

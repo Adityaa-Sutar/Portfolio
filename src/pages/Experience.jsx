@@ -1,160 +1,198 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Calendar, MapPin, Briefcase, Download } from 'lucide-react';
-import codeclogo from "../assets/codec.png";
-import aerozonelogo from "../assets/aerozone.png";
+import React from 'react'
+import { motion as Motion } from 'framer-motion'
+import { GraduationCap, Award, MapPin } from 'lucide-react'
+import codeclogo from '../assets/codec.png'
+import aerozonelogo from '../assets/aerozone.png'
 
+const EASE = [0.22, 1, 0.36, 1]
+
+const EXPERIENCES = [
+  {
+    id: 1,
+    role: 'Cloud Computing Intern',
+    company: 'Codec Technologies India',
+    type: 'Internship',
+    duration: 'Apr 2026 — Jun 2026',
+    durationDetail: '3 mos',
+    location: 'India · Hybrid',
+    logo: codeclogo,
+    highlights: [
+      'Deployed, managed, and optimized cloud-based web applications across virtualized infrastructure.',
+      'Improved system performance, uptime reliability, and cloud cost efficiency through resource tuning.',
+    ],
+    tags: ['AWS', 'Cloud Infrastructure', 'Virtualization', 'Optimization'],
+  },
+  {
+    id: 2,
+    role: 'Full Stack Engineer',
+    company: 'AEROZONE',
+    type: 'Internship',
+    duration: 'Aug 2025 — Mar 2026',
+    durationDetail: '8 mos',
+    location: 'Mumbai, Maharashtra · Hybrid',
+    logo: aerozonelogo,
+    highlights: [
+      'Engineered a responsive full-stack web application using React.js, Node.js, and Firestore to streamline client onboarding.',
+      'Conducted peer code reviews and enforced modular best practices, improving overall codebase maintainability.',
+    ],
+    tags: ['React.js', 'Node.js', 'Firestore', 'Code Review'],
+  },
+]
+
+const CREDENTIALS = [
+  {
+    icon: GraduationCap,
+    eyebrow: 'Education · Mar 2025',
+    title: 'B.Sc. in Computer Science',
+    subtitle: 'K. V. Pendharkar College (Mumbai University)',
+  },
+  {
+    icon: Award,
+    eyebrow: 'Certification',
+    title: 'AWS Certified Cloud Practitioner',
+    subtitle: 'Amazon Web Services (AWS)',
+  },
+]
 
 const Experience = () => {
-  const experiences = [
-    {
-      id: 1,
-      role: "Cloud Computing Intern",
-      company: "Codec Technologies India",
-      type: "Internship",
-      duration: "Mar 2026 - Jul 2026",
-      durationDetail: "3 mo",
-      location: "India · Hybrid",
-      logo: codeclogo,
-      gradient: "from-cyan-400 to-blue-600",
-      bgBlur: "bg-blue-900/10",
-      borderGlow: "group-hover:border-blue-500/50"
-    },
-    {
-      id: 2,
-      role: "Full Stack Engineer",
-      company: "AEROZONE",
-      type: "Internship",
-      duration: "Aug 2025 - Mar 2026",
-      durationDetail: "8 mos",
-      location: "Mumbai, Maharashtra, India · Hybrid",
-      logo: aerozonelogo,
-      gradient: "from-purple-400 to-pink-600",
-      bgBlur: "bg-purple-900/10",
-      borderGlow: "group-hover:border-purple-500/50"
-    }
-  ];
-
   return (
-    <div className="min-h-screen pt-24 pb-24 px-4 md:px-6 bg-zinc-950 text-white flex flex-col justify-center relative overflow-x-hidden w-full">
-      {/* Dynamic Background Gradients */}
-      <div className="absolute top-[20%] right-[10%] w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-blue-600/10 rounded-full blur-[80px] pointer-events-none opacity-50 will-change-transform" style={{transform: 'translateZ(0)'}} />
-      <div className="absolute bottom-[20%] left-[10%] w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-purple-600/10 rounded-full blur-[80px] pointer-events-none opacity-50 will-change-transform" style={{transform: 'translateZ(0)'}} />
-
-      <div className="max-w-6xl mx-auto w-full relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
+    <div className="w-full bg-zinc-950 border-t border-white/[0.06] py-24 md:py-32">
+      <div className="max-w-6xl mx-auto px-6 md:px-10">
+        {/* Section Header */}
+        <Motion.div
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          viewport={{ once: true }}
-          className="text-center mb-24"
+          transition={{ duration: 0.6, ease: EASE }}
+          viewport={{ once: true, amount: 0.2 }}
+          className="mb-14 md:mb-16 flex flex-col md:flex-row md:items-end md:justify-between gap-4"
         >
-          <h2 className="text-5xl md:text-7xl font-sans font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-200 to-zinc-500 tracking-tight leading-tight mb-4">
-            Experience
-          </h2>
-          <div className="w-24 h-1.5 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
-        </motion.div>
-
-        {/* Timeline Layout */}
-        <div className="relative">
-          {/* Vertical Timeline Line */}
-          <div className="absolute left-[39px] md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-blue-500/50 via-purple-500/30 to-transparent transform md:-translate-x-1/2 rounded-full hidden sm:block"></div>
-
-          <div className="space-y-16 md:space-y-20">
-            {experiences.map((exp, index) => {
-              const isEven = index % 2 === 0;
-              return (
-                <motion.div
-                  key={exp.id}
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  className={`relative flex flex-col md:flex-row items-start md:items-center ${isEven ? 'md:flex-row-reverse' : ''} group`}
-                >
-
-                  {/* Timeline Badge/Icon */}
-                  <div className="absolute left-[20px] md:left-1/2 transform -translate-x-1/2 flex items-center justify-center  sm:flex z-20">
-                    <motion.div
-                      whileHover={{ scale: 1.2, rotate: 10 }}
-                      className={`w-10 h-10 md:w-14 md:h-14 rounded-full bg-zinc-950 border-2 border-white/20 group-hover:border-blue-400 flex items-center justify-center shadow-lg transition-all duration-300 z-10 box-border`}
-                    >
-                      <Briefcase className="w-4 h-4 md:w-6 md:h-6 text-zinc-400 group-hover:text-white transition-colors" />
-                    </motion.div>
-                  </div>
-
-                  {/* Empty space for alternating layout on desktop */}
-                  <div className="hidden md:block md:w-1/2"></div>
-
-                  {/* Card Content */}
-                  <div className={`w-full sm:pl-20 md:w-1/2 md:px-10 ${isEven ? 'md:text-right' : 'md:text-left'} relative z-10 mt-6 sm:mt-0`}>
-                    <motion.div
-                      whileHover={{ y: -5 }}
-                      className={`relative overflow-hidden ${exp.bgBlur} border border-white/10 ${exp.borderGlow} rounded-[2rem] p-6 sm:p-10 transition-all duration-500 shadow-2xl hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)]`}
-                    >
-                      {/* Decorative Gradient Blob inside card */}
-                      <div className={`absolute -top-24 ${isEven ? '-left-24' : '-right-24'} w-48 h-48 bg-gradient-to-br ${exp.gradient} rounded-full blur-[80px] opacity-20 group-hover:opacity-40 transition-opacity duration-700`}></div>
-
-                      <div className={`flex flex-col sm:flex-row items-start ${isEven ? 'md:flex-row-reverse md:items-center md:justify-end md:text-right' : 'sm:items-center'} gap-6 mb-8 relative z-10`}>
-                        {/* Company Logo representation */}
-                        <div className={`flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br ${exp.gradient} p-[3px] sm:p-[4px] shadow-lg group-hover:scale-105 transition-transform duration-500`}>
-                          <div className="w-full h-full bg-zinc-950 rounded-[14px] flex items-center justify-center overflow-hidden">
-                            {typeof exp.logo === "string" && exp.logo.endsWith(".png") ? (
-                              <img
-                                src={exp.logo}
-                                alt={exp.company}
-                                className="w-full h-full object-contain bg-white"
-                              />
-                            ) : (
-                              <span className={`text-2xl sm:text-3xl font-black bg-clip-text text-transparent bg-gradient-to-br ${exp.gradient}`}>
-                                {exp.logo}
-                              </span>
-                            )}
-                          </div>
-                        </div>
-
-                        <div>
-                          <h3 className="text-2xl sm:text-2xl font-bold text-white tracking-wide mb-1">
-                            {exp.role}
-                          </h3>
-                          <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-semibold uppercase tracking-wider text-zinc-300 ${isEven ? 'md:flex-row-reverse md:ml-auto' : ''}`}>
-                            <span className={`w-2 h-2 rounded-full bg-gradient-to-r ${exp.gradient}`}></span>
-                            {exp.type}
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="space-y-2 relative z-10">
-                        <div className={`text-xl sm:text-2xl font-medium text-zinc-200 ${isEven ? 'md:text-right' : ''}`}>
-                          {exp.company}
-                        </div>
-
-                        <div className={`flex flex-col ${isEven ? 'md:items-end' : 'md:items-start'} gap-3 text-sm sm:text-base text-zinc-400 font-medium`}>
-                          <div className={`flex items-center gap-3 ${isEven ? 'md:flex-row-reverse' : ''}`}>
-                            <div className="p-2 rounded-lg bg-white/5 text-blue-400">
-                              <Calendar className="w-4 h-4 sm:w-5 sm:h-5" />
-                            </div>
-                            <span>{exp.duration} <span className="opacity-50">({exp.durationDetail})</span></span>
-                          </div>
-
-                          <div className={`flex items-center gap-3 ${isEven ? 'md:flex-row-reverse' : ''}`}>
-                            <div className="p-2 rounded-lg bg-white/5 text-purple-400">
-                              <MapPin className="w-4 h-4 sm:w-5 sm:h-5" />
-                            </div>
-                            <span>{exp.location}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </motion.div>
-                  </div>
-                </motion.div>
-              );
-            })}
+          <div>
+            <p className="font-mono text-xs uppercase tracking-[0.2em] text-zinc-500 mb-3">
+              02 / Experience
+            </p>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-white leading-[1.15]">
+              Where I&apos;ve{' '}
+              <span className="font-serif italic font-normal text-zinc-300">
+                contributed.
+              </span>
+            </h2>
           </div>
+          <p className="text-sm text-zinc-400 max-w-sm">
+            Hands-on engineering experience across full-stack product delivery and cloud infrastructure.
+          </p>
+        </Motion.div>
+
+        {/* Minimal Hairline Experience Rows */}
+        <div className="divide-y divide-white/[0.08] border-y border-white/[0.08]">
+          {EXPERIENCES.map((exp, index) => (
+            <Motion.article
+              key={exp.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.08, ease: EASE }}
+              viewport={{ once: true, amount: 0.2 }}
+              className="group grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 py-10 md:py-12 transition-colors"
+            >
+              {/* Left Column: Company & Period */}
+              <div className="md:col-span-4 flex flex-col justify-between gap-4">
+                <div className="flex items-center gap-3.5">
+                  <div className="h-11 w-11 shrink-0 rounded-xl border border-white/10 bg-white p-1.5 overflow-hidden flex items-center justify-center">
+                    <img
+                      src={exp.logo}
+                      alt={exp.company}
+                      loading="lazy"
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-semibold text-zinc-100 leading-snug">
+                      {exp.company}
+                    </h3>
+                    <span className="font-mono text-[11px] uppercase tracking-wider text-zinc-500">
+                      {exp.type}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="space-y-1.5 font-mono text-xs text-zinc-400">
+                  <p className="text-zinc-300">
+                    {exp.duration}{' '}
+                    <span className="text-zinc-500">({exp.durationDetail})</span>
+                  </p>
+                  <p className="inline-flex items-center gap-1.5 text-zinc-500">
+                    <MapPin className="w-3.5 h-3.5 text-zinc-500" />
+                    {exp.location}
+                  </p>
+                </div>
+              </div>
+
+              {/* Right Column: Role, Impact & Stack */}
+              <div className="md:col-span-8 flex flex-col justify-between">
+                <div>
+                  <h4 className="text-xl sm:text-2xl font-semibold tracking-tight text-white mb-4 group-hover:text-blue-400 transition-colors duration-200">
+                    {exp.role}
+                  </h4>
+
+                  <ul className="space-y-2.5 text-sm sm:text-[15px] text-zinc-400 leading-relaxed mb-6">
+                    {exp.highlights.map((point, i) => (
+                      <li key={i} className="flex items-start gap-3">
+                        <span
+                          aria-hidden="true"
+                          className="mt-2 h-1 w-1 shrink-0 rounded-full bg-zinc-500"
+                        />
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                  {exp.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-md border border-white/[0.08] bg-zinc-900/60 px-2.5 py-1 font-mono text-[11px] text-zinc-300"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </Motion.article>
+          ))}
+        </div>
+
+        {/* Education & Certification Sub-row */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12">
+          {CREDENTIALS.map((cred, idx) => {
+            const Icon = cred.icon
+            return (
+              <Motion.div
+                key={cred.title}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: idx * 0.08, ease: EASE }}
+                viewport={{ once: true, amount: 0.2 }}
+                className="flex items-start gap-4 rounded-2xl border border-white/[0.07] bg-zinc-900/35 p-6"
+              >
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-zinc-950 text-zinc-300">
+                  <Icon className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-zinc-500 mb-1">
+                    {cred.eyebrow}
+                  </p>
+                  <h3 className="text-base font-semibold text-white">
+                    {cred.title}
+                  </h3>
+                  <p className="text-sm text-zinc-400 mt-0.5">{cred.subtitle}</p>
+                </div>
+              </Motion.div>
+            )
+          })}
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Experience;
+export default Experience

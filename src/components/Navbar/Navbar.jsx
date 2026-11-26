@@ -7,21 +7,29 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50)
+      setScrolled(window.scrollY > 24)
     }
-    window.addEventListener('scroll', handleScroll)
+    handleScroll()
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   return (
-    <nav className={`fixed p-4 top-0 inset-x-0 z-50 transition-all duration-700 ${scrolled ? 'shadow-lg' : ''}`}>
-      {/* Background layer with backdrop filter to prevent the nav from creating a containing block */}
-      <div className={`absolute inset-0 -z-10 transition-all duration-700 ${scrolled ? 'bg-zinc-950/50 backdrop-blur-md' : 'bg-transparent'}`}></div>
-      <div className='flex justify-between items-center px-4 md:px-8 text-background'>
+    <header
+      className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
+        scrolled
+          ? 'bg-zinc-950/80 backdrop-blur-xl border-b border-white/[0.06] py-3.5'
+          : 'bg-transparent border-b border-transparent py-5'
+      }`}
+    >
+      <nav
+        aria-label="Primary Navigation"
+        className="max-w-6xl mx-auto px-6 md:px-10 flex items-center justify-between"
+      >
         <NavPart1 />
         <Navbarpart2 />
-      </div>
-    </nav>
+      </nav>
+    </header>
   )
 }
 

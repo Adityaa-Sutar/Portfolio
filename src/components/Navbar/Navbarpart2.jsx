@@ -1,101 +1,174 @@
-import React, { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X } from 'lucide-react'
+import React, { useState, useEffect } from 'react'
+import { motion as Motion, AnimatePresence } from 'framer-motion'
+import { Menu, X, ArrowUpRight } from 'lucide-react'
+
+const MENU_ITEMS = [
+  { id: 'about', num: '01', label: 'About' },
+  { id: 'experience', num: '02', label: 'Experience' },
+  { id: 'work', num: '03', label: 'Work' },
+  { id: 'contact', num: '04', label: 'Contact' },
+]
 
 const Navbarpart2 = () => {
   const [isOpen, setIsOpen] = useState(false)
+  const [activeSection, setActiveSection] = useState('home')
+
+  useEffect(() => {
+    const sectionIds = ['home', ...MENU_ITEMS.map((item) => item.id)]
+    const elements = sectionIds
+      .map((id) => document.getElementById(id))
+      .filter(Boolean)
+
+    if (elements.length === 0) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id)
+          }
+        })
+      },
+      { rootMargin: '-40% 0px -45% 0px', threshold: 0 }
+    )
+
+    elements.forEach((el) => observer.observe(el))
+    return () => observer.disconnect()
+  }, [])
 
   const scrollToSection = (sectionId) => {
     setIsOpen(false)
-    // Small delay lets the mobile menu close animation start before we scroll.
-    // On desktop the menu is always visible so the delay is imperceptible.
     setTimeout(() => {
       const element = document.getElementById(sectionId)
       if (!element) return
 
       if (window.__lenis) {
-        // Desktop: use Lenis's own scrollTo so it stays in control of the
-        // animation — calling window.scrollTo() alongside Lenis causes a
-        // dual-animation conflict and jank.
-        window.__lenis.scrollTo(element, { offset: -72, duration: 1.2 })
+        window.__lenis.scrollTo(element, { offset: -64, duration: 1.1 })
       } else {
-        // Mobile / touch: Lenis is not running, use native smooth scroll.
-        const navbarHeight = 72
-        const elementTop = element.getBoundingClientRect().top + window.scrollY - navbarHeight
+        const elementTop = element.getBoundingClientRect().top + window.scrollY - 64
         window.scrollTo({ top: elementTop, behavior: 'smooth' })
       }
-    }, 100)
+    }, 80)
   }
 
-  const menuItems = [
-    { id: 'about', label: 'About' },
-    { id: 'experience', label: 'Experience' },
-    { id: 'work', label: 'Work' },
-    { id: 'contact', label: 'Contact' }
-  ]
-
   return (
-    <div>
+    <div className="flex items-center">
       {/* Desktop Menu */}
-    <div className='hidden md:flex justify-between items-center gap-8 cursor-pointer text-white text-base capitalize font-bold pb-5'>
-  {menuItems.map((item) => (
-    <h4
-      key={item.id}
-      onClick={() => scrollToSection(item.id)}
-      className='group relative flex flex-col items-center transition-transform duration-300 hover:scale-110'
-    >
-      {item.label}
+      <div className="hidden md:flex items-center gap-7">
+        <ul className="flex items-center gap-6">
+          {MENU_ITEMS.map((item) => {
+            const isActive = activeSection === item.id
+            return (
+              <li key={item.id}>
+                <button
+                  type="button"
+                  onClick={() => scrollToSection(item.id)}
+                  className={`relative py-1 text-sm font-medium transition-colors duration-200 cursor-pointer ${
+                    isActive ? 'text-white' : 'text-zinc-400 hover:text-zinc-100'
+                  }`}
+                >
+                  {item.label}
+                  {isActive && (
+                    <Motion.span
+                      layoutId="nav-active-dot"
+                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                      className="absolute -bottom-1 left-1/2 -translate-x-1/2 h-1 w-1 rounded-full bg-blue-500"
+                    />
+                  )}
+                </button>
+              </li>
+            )
+          })}
+        </ul>
 
-      {/* Dot appears only on hover */}
-      <div className='mt-1 w-1 h-1  bg-white rounded-full 
-                      opacity-0 scale-0 
-                      group-hover:opacity-100 group-hover:scale-110 
-                      transition-all duration-300'>
+        <div className="h-4 w-px bg-white/10" aria-hidden="true" />
+
+        <a
+          href="/resume.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 rounded-full border border-white/12 bg-white/[0.04] px-3.5 py-1.5 text-xs font-medium text-zinc-200 transition-all duration-200 hover:border-white/25 hover:bg-white/[0.08] hover:text-white"
+        >
+          Resume
+          <ArrowUpRight className="w-3.5 h-3.5 text-zinc-400" />
+        </a>
       </div>
-    </h4>
-  ))}
-</div>
-
 
       {/* Mobile Menu Toggle */}
-      <div className="md:hidden pb-2">
-        <button onClick={() => setIsOpen(true)} className="text-white p-2 relative z-50">
-          <Menu className="w-8 h-8" />
+      <div className="md:hidden">
+        <button
+          type="button"
+          onClick={() => setIsOpen(true)}
+          aria-label="Open navigation menu"
+          className="inline-flex items-center justify-center rounded-lg border border-white/10 bg-zinc-900/70 p-2 text-zinc-200 transition-colors hover:text-white"
+        >
+          <Menu className="w-5 h-5" />
         </button>
       </div>
 
-      {/* Mobile Fullscreen Menu */}
+      {/* Mobile Fullscreen Drawer */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, x: '100%' }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: '100%' }}
-            transition={{ duration: 0.4, ease: "easeInOut" }}
-            className="fixed inset-0 bg-black/95 backdrop-blur-xl z-50 flex flex-col items-center justify-center"
+          <Motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="fixed inset-0 z-50 bg-zinc-950/95 backdrop-blur-2xl flex flex-col justify-between p-6"
           >
-            <div className="absolute top-5 right-4 md:right-8">
-              <button onClick={() => setIsOpen(false)} className="text-white/70 hover:text-white transition-colors p-4">
-                <X className="w-10 h-10" />
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-xs uppercase tracking-widest text-zinc-500">
+                Navigation
+              </span>
+              <button
+                type="button"
+                onClick={() => setIsOpen(false)}
+                aria-label="Close navigation menu"
+                className="rounded-lg border border-white/10 bg-zinc-900/80 p-2 text-zinc-300 hover:text-white transition-colors"
+              >
+                <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="flex flex-col gap-10 text-center">
-              {menuItems.map((item, index) => (
-                <motion.h4
+            <div className="flex flex-col divide-y divide-white/[0.06]">
+              {MENU_ITEMS.map((item, index) => (
+                <Motion.button
                   key={item.id}
-                  initial={{ opacity: 0, y: 30 }}
+                  type="button"
+                  initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 + index * 0.1 }}
-                  className='text-4xl sm:text-5xl font-myFont font-bold text-white cursor-pointer hover:text-blue-500 transition-colors relative group'
+                  transition={{ delay: 0.05 + index * 0.05, duration: 0.3 }}
                   onClick={() => scrollToSection(item.id)}
+                  className="group flex items-baseline justify-between py-6 text-left"
                 >
-                  {item.label}
-                  <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-1 bg-blue-500 transition-all duration-300 group-hover:w-1/2 rounded-full"></span>
-                </motion.h4>
+                  <span className="text-3xl sm:text-4xl font-semibold tracking-tight text-zinc-100 group-hover:text-blue-400 transition-colors">
+                    {item.label}
+                  </span>
+                  <span className="font-mono text-xs text-zinc-500 group-hover:text-zinc-300">
+                    {item.num}
+                  </span>
+                </Motion.button>
               ))}
             </div>
-          </motion.div>
+
+            <div className="flex items-center justify-between pt-6 border-t border-white/[0.06]">
+              <a
+                href="/resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-medium text-zinc-950"
+              >
+                Download Resume
+                <ArrowUpRight className="w-4 h-4" />
+              </a>
+              <a
+                href="mailto:adityasutar2807@gmail.com"
+                className="text-xs font-mono text-zinc-400 hover:text-white"
+              >
+                Email Me
+              </a>
+            </div>
+          </Motion.div>
         )}
       </AnimatePresence>
     </div>
