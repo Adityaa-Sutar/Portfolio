@@ -32,6 +32,11 @@ const App = () => {
       smoothWheel: true,
       wheelMultiplier: 0.8,   // reduce wheel sensitivity = less jank
     })
+
+    // Expose lenis globally so navbar links can call lenis.scrollTo()
+    // instead of window.scrollTo(), avoiding a dual-animation conflict.
+    window.__lenis = lenis
+
     let rafId;
 
     function raf(time) {
@@ -44,6 +49,7 @@ const App = () => {
     return () => {
       cancelAnimationFrame(rafId)
       lenis.destroy()
+      window.__lenis = null
     }
   }, [])
 

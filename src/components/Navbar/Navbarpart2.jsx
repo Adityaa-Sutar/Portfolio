@@ -7,14 +7,23 @@ const Navbarpart2 = () => {
 
   const scrollToSection = (sectionId) => {
     setIsOpen(false)
-    // Small delay to let the mobile menu close animation start before scrolling
+    // Small delay lets the mobile menu close animation start before we scroll.
+    // On desktop the menu is always visible so the delay is imperceptible.
     setTimeout(() => {
       const element = document.getElementById(sectionId)
       if (!element) return
-      // Calculate offset accounting for fixed navbar height (~80px)
-      const navbarHeight = 72
-      const elementTop = element.getBoundingClientRect().top + window.scrollY - navbarHeight
-      window.scrollTo({ top: elementTop, behavior: 'smooth' })
+
+      if (window.__lenis) {
+        // Desktop: use Lenis's own scrollTo so it stays in control of the
+        // animation — calling window.scrollTo() alongside Lenis causes a
+        // dual-animation conflict and jank.
+        window.__lenis.scrollTo(element, { offset: -72, duration: 1.2 })
+      } else {
+        // Mobile / touch: Lenis is not running, use native smooth scroll.
+        const navbarHeight = 72
+        const elementTop = element.getBoundingClientRect().top + window.scrollY - navbarHeight
+        window.scrollTo({ top: elementTop, behavior: 'smooth' })
+      }
     }, 100)
   }
 
