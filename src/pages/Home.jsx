@@ -2,23 +2,17 @@ import React from 'react'
 import { motion as Motion } from 'framer-motion'
 import { ArrowRight, ArrowDown, Download, Github, Linkedin, Mail } from 'lucide-react'
 import profileImg from '../assets/img.jpg'
+import { scrollToTarget } from '../lib/scroll'
 
 const EASE = [0.22, 1, 0.36, 1]
 
 const Home = () => {
   const scrollToSection = (id) => {
-    const el = document.getElementById(id)
-    if (!el) return
-    if (window.__lenis) {
-      window.__lenis.scrollTo(el, { offset: -64, duration: 1.1 })
-    } else {
-      const top = el.getBoundingClientRect().top + window.scrollY - 64
-      window.scrollTo({ top, behavior: 'smooth' })
-    }
+    scrollToTarget(id, -64)
   }
 
   return (
-    <div className="relative min-h-screen w-full bg-zinc-950 flex flex-col justify-between overflow-hidden">
+    <div className="relative min-h-screen w-full bg-zinc-950 flex flex-col justify-between overflow-x-clip">
       {/* Subtle architectural top spotlight */}
       <div
         aria-hidden="true"

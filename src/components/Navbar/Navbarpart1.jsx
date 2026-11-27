@@ -1,15 +1,9 @@
 import React from 'react'
+import { scrollToTarget } from '../../lib/scroll'
 
 const NavPart1 = () => {
   const scrollToHome = () => {
-    const element = document.getElementById('home')
-    if (!element) return
-
-    if (window.__lenis) {
-      window.__lenis.scrollTo(0, { duration: 1.1 })
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-    }
+    scrollToTarget('top')
   }
 
   return (

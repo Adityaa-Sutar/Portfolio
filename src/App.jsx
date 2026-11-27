@@ -1,31 +1,28 @@
-import React, { useEffect, lazy, Suspense } from 'react'
+import React, { useEffect } from 'react'
 import { MotionConfig } from 'framer-motion'
 import Lenis from 'lenis'
+import 'lenis/dist/lenis.css'
 import Navbar from './components/Navbar/Navbar'
 import Home from './pages/Home'
+import About from './pages/About'
+import Experience from './pages/Experience'
+import Project from './pages/Project'
+import Contact from './pages/Contact'
 import './App.css'
-
-// Lazy-load below-the-fold sections for faster initial paint
-const About = lazy(() => import('./pages/About'))
-const Experience = lazy(() => import('./pages/Experience'))
-const Project = lazy(() => import('./pages/Project'))
-const Contact = lazy(() => import('./pages/Contact'))
 
 const App = () => {
   useEffect(() => {
-    // Skip Lenis on touch devices so native mobile scroll stays fluid
-    const isTouchDevice =
-      'ontouchstart' in window ||
-      navigator.maxTouchPoints > 0 ||
-      window.matchMedia('(pointer: coarse)').matches
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const isCoarsePointer = window.matchMedia('(pointer: coarse)').matches
 
-    if (isTouchDevice) return
+    if (prefersReducedMotion || isCoarsePointer) return
 
     const lenis = new Lenis({
-      duration: 1.1,
+      duration: 1.05,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
-      wheelMultiplier: 0.85,
+      wheelMultiplier: 0.9,
+      autoResize: true,
     })
 
     window.__lenis = lenis
@@ -55,23 +52,21 @@ const App = () => {
             <Home />
           </section>
 
-          <Suspense fallback={<div className="min-h-screen bg-zinc-950" />}>
-            <section id="about">
-              <About />
-            </section>
+          <section id="about">
+            <About />
+          </section>
 
-            <section id="experience">
-              <Experience />
-            </section>
+          <section id="experience">
+            <Experience />
+          </section>
 
-            <section id="work">
-              <Project />
-            </section>
+          <section id="work">
+            <Project />
+          </section>
 
-            <section id="contact">
-              <Contact />
-            </section>
-          </Suspense>
+          <section id="contact">
+            <Contact />
+          </section>
         </main>
       </div>
     </MotionConfig>

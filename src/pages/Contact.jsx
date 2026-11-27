@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { motion as Motion, AnimatePresence } from 'framer-motion'
 import { ArrowUpRight, ArrowUp, CheckCircle, XCircle, X, Copy, Check } from 'lucide-react'
+import { scrollToTarget } from '../lib/scroll'
 
 const EASE = [0.22, 1, 0.36, 1]
 
@@ -59,11 +60,7 @@ const Contact = () => {
   }
 
   const scrollToTop = () => {
-    if (window.__lenis) {
-      window.__lenis.scrollTo(0, { duration: 1.1 })
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-    }
+    scrollToTarget('top')
   }
 
   const handleSubmit = async (e) => {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { motion as Motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, ArrowUpRight } from 'lucide-react'
+import { scrollToTarget } from '../../lib/scroll'
 
 const MENU_ITEMS = [
   { id: 'about', num: '01', label: 'About' },
@@ -36,19 +37,25 @@ const Navbarpart2 = () => {
     return () => observer.disconnect()
   }, [])
 
+  useEffect(() => {
+    if (isOpen) {
+      window.__lenis?.stop()
+      document.body.style.overflow = 'hidden'
+    } else {
+      window.__lenis?.start()
+      document.body.style.overflow = ''
+    }
+    return () => {
+      window.__lenis?.start()
+      document.body.style.overflow = ''
+    }
+  }, [isOpen])
+
   const scrollToSection = (sectionId) => {
     setIsOpen(false)
     setTimeout(() => {
-      const element = document.getElementById(sectionId)
-      if (!element) return
-
-      if (window.__lenis) {
-        window.__lenis.scrollTo(element, { offset: -64, duration: 1.1 })
-      } else {
-        const elementTop = element.getBoundingClientRect().top + window.scrollY - 64
-        window.scrollTo({ top: elementTop, behavior: 'smooth' })
-      }
-    }, 80)
+      scrollToTarget(sectionId, -64)
+    }, 60)
   }
 
   return (
